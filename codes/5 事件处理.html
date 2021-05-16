@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        .btn {
+            width: 100px;
+            height: 40px;
+            background-color: skyblue;
+            outline: none;
+            border: none;
+        }
+
+        button {
+            width: 100px;
+            height: 40px;
+            margin-top: 10px;
+        }
+
+        .likes {
+            width: 200px;
+            height: 40px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div id="root2"></div>
+    <div id="root3"></div>
+    <div id="root4"></div>
+
+    <script type="text/babel">
+        //体验在组件中添加事件
+        function Test() {
+            function sayHi() {
+                alert('hello~~');
+            }
+            return (
+                <button className='btn' onClick={sayHi}>hello world</button>
+            );
+
+        }
+
+        ReactDOM.render(
+            <Test />,
+            document.getElementById('root')
+        );
+
+        //通过事件触发函数改变state中的值
+        class Toggle extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { isOn: true };
+                this.handleClick = this.handleClick.bind(this);
+            }
+
+            handleClick() {
+                // console.log(this);
+                this.setState(state => (
+                    {
+                        isOn: !state.isOn,
+                    }
+                ));
+            }
+
+            render() {
+                return (
+                    <button onClick={this.handleClick}>
+                        {this.state.isOn ? 'on' : 'off'}
+                    </button>
+                );
+            }
+
+        }
+
+        ReactDOM.render(
+            <Toggle />,
+            document.getElementById('root2')
+        );
+
+        class Likes extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { likes: 0 };
+                this.addLikes = this.addLikes.bind(this);
+            }
+
+            addLikes() {
+                this.setState(state => (
+                    {
+                        likes: state.likes + 1
+                    }
+                ));
+            }
+
+            render() {
+                return (
+                    <button className="likes" onClick={this.addLikes}>
+                        你👍了我{this.state.likes}下
+                    </button>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <Likes />,
+            document.getElementById('root3')
+        );
+
+        //向事件处理程序传递参数
+        class Param extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { id: 1024 };
+                this.showId = this.showId.bind(this);
+            }
+            showId(id) {
+                console.log(id);
+            }
+
+            render() {
+                return (
+                    <div>
+                        <button onClick={(e) => this.showId(this.state.id, e)}>
+                            {this.state.id}
+                        </button>
+                        <button onClick={this.showId.bind(this, this.state.id)}>
+                            {this.state.id}
+                        </button>
+                    </div>
+
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <Param />,
+            document.getElementById('root4')
+        );
+
+    </script>
+
+</body>
+
+</html>

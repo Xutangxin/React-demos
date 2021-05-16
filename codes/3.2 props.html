@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const data = {
+            name: 'xutangxin',
+            age: 22,
+            sex: 'man'
+        };
+
+        function Person(props) {
+            console.log(this);//组件实例
+            console.log(props);
+            return (
+                <div>
+                    <ul>
+                        <li>姓名：{props.name}</li>
+                        <li>年龄：{props.age}</li>
+                        <li>性别：{props.sex}</li>
+                    </ul>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <Person name={data.name} age={data.age} sex={data.sex} />,
+            document.getElementById('root')
+        );
+
+    </script>
+
+</body>
+
+</html>

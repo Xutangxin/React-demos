@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        .time {
+            /* margin: 0 auto; */
+            width: 300px;
+            height: 100px;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 100px;
+            box-shadow: darkgray 5px 5px 5px;
+            background-color: skyblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        class Test extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { date: new Date() };
+            }
+
+            componentDidMount() {
+                console.log('hello world');
+                const timer = setInterval(() => this.showTime(), 1000);
+            }
+
+            showTime() {
+                this.setState({
+                    date: new Date(),
+                });
+
+            }
+
+            render() {
+                return (
+                    <div className='time'>
+                        <h2>the time is {this.state.date.toLocaleTimeString()}</h2>
+                    </div>
+                );
+
+            }
+
+        }
+
+        function App() {
+            return (
+                <div>
+                    <Test />
+                    <Test />
+                    <Test />
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+
+    </script>
+
+</body>
+
+</html>

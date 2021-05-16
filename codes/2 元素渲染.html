@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div id="root2"></div>
+
+    <script type="text/babel">
+        //计时器案例
+        //react元素是不可变元素 更新ui的唯一方式是创建新元素，并将其传入
+        function showTime() {
+            const timer = (
+                <div>
+                    <h2>当前时间：{new Date().toLocaleTimeString()}</h2>
+                </div>
+            );
+            ReactDOM.render(
+                timer,
+                document.getElementById('root2')
+            );
+        }
+
+        setInterval(showTime, 1000);
+
+        const hello = 'hello React!';
+        const element = <h1>{hello}</h1>;
+        ReactDOM.render(
+            element,
+            document.getElementById('root')
+        );
+
+    </script>
+
+</body>
+
+</html>
