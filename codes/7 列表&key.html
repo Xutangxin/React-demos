@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div id="root2"></div>
+    <div id="root3"></div>
+    <div id="root4"></div>
+    <div id="root5"></div>
+
+    <script type="text/babel">
+        //渲染多个组件
+        const numbers = [1, 2, 3, 4, 5];
+        const listItems = numbers.map(number =>
+            <li>{number}</li>
+        );
+
+        // ReactDOM.render(
+        //     <ul>{listItems}</ul>,
+        //     document.getElementById('root')
+        // );
+
+        //上一个例子的重构
+        function NumberList(props) {
+            const numbers = props.numbers;
+            const listItems = numbers.map(number =>
+                <li key={number.toString()}>{number}</li>//为每个元素加上key
+            );
+            return (
+                <ul>{listItems}</ul>
+            );
+        }
+
+        ReactDOM.render(
+            <NumberList numbers={numbers} />,
+            document.getElementById('root2')
+        );
+
+        //key正确放置位置
+        //key应该在数组的上下文中指定
+        //一个好的经验法则是：在 map() 方法中的元素需要设置 key 属性
+        const items = ['c', 'java', 'python', 'javascript'];
+        function ItemList(props) {
+            const items = props.items;
+            const list = items.map(item =>
+                <li key={item.toString()}>{item}</li>
+
+            );
+            return (
+                <ul>
+                    {list}
+                </ul>
+            );
+        }
+
+        ReactDOM.render(
+            <ItemList items={items} />,
+            document.getElementById('root3')
+        );
+
+        //key只需要在兄弟节点之间唯一，不需要全局唯一
+        const posts = [
+            { id: 1, title: 'Hello World', content: 'Welcome to learning React!' },
+            { id: 2, title: 'Installation', content: 'You can install React from npm.' }
+        ];
+        function Blog(props) {
+            const sidebar = (
+                <ul>
+                    {props.posts.map(post =>
+                        <li key={post.id}>
+                            {post.title}
+                        </li>
+                    )}
+                </ul>
+            );
+            const content = props.posts.map(post =>
+                <div key={post.id}>
+                    <h3>{post.title}</h3>
+                    <p>{post.content}</p>
+                </div>
+            );
+            return (
+                <div>
+                    {sidebar}
+                    <hr />
+                    {content}
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <Blog posts={posts} />,
+            document.getElementById('root4')
+        );
+
+        //jsx中内联map 在大括号{}中嵌入结果
+        const foods = ['rice', 'meat', 'water', 'coffee'];
+        function FoodList(props) {
+            const foods = props.foods;
+            return (
+                <ul>
+                    {foods.map(food =>
+                        <li key={food.toString()} value={food} id={food.toString()}>{food}</li>
+                    )}
+                </ul>
+            );
+        }
+
+        ReactDOM.render(
+            <FoodList foods={foods} />,
+            document.getElementById('root5')
+        );
+
+    </script>
+
+</body>
+
+</html>
