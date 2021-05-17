@@ -15,16 +15,26 @@
     <div id="root"></div>
     <div id="root1"></div>
     <div id="root2"></div>
-
+    <div id="root3"></div>
 
     <script type="text/babel">
 
         function UserGreeting(props) {
-            return <h1>welcome back!</h1>
+            return (
+                <div>
+                    <h3>you are already login</h3>
+                    <h1>welcome back!</h1>
+                </div>
+            );
         }
 
         function GuestGreeting(props) {
-            return <h1>please sign up</h1>
+            return (
+                <div>
+                    <h3>you are already logout</h3>
+                    <h1>please sign up</h1>
+                </div>
+            );
         }
 
         //根据isLogIn的值展示不同文字
@@ -99,7 +109,69 @@
 
         ReactDOM.render(
             <LoginControl />,
+            document.getElementById('root1')
+        );
+
+        //使用&或三目运算符渲染组件
+        function Mailbox(props) {
+            const unreadMessages = props.unreadMessages;
+            return (
+                <div>
+                    <h1>hello</h1>
+                    {
+                        unreadMessages.length > 0 ? <h2>you have {unreadMessages.length} messages</h2> : <h2>you have 0 messages</h2>
+                    }
+                </div>
+            );
+        }
+
+        const messages = ['React', 'Re: React', 'Re:Re: React'];
+        const msg = [];
+
+        ReactDOM.render(
+            <Mailbox unreadMessages={messages} />,
             document.getElementById('root2')
+        );
+
+        //阻止组件渲染
+        function WarningBanner(props) {
+            if (!props.warn) return null;//条件不满足就返回null
+
+            return (
+                <div className='warning'>
+                    <b>WARNING!</b>
+                </div>
+            );
+        }
+
+        class Page extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { showWarning: true };
+                this.handleToggleClick = this.handleToggleClick.bind(this);
+            }
+
+            handleToggleClick() {
+                this.setState(state => ({
+                    showWarning: !state.showWarning
+                }));
+            }
+
+            render() {
+                return (
+                    <div>
+                        <WarningBanner warn={this.state.showWarning} />
+                        <button onClick={this.handleToggleClick}>
+                            {this.state.showWarning ? 'HIDE' : 'SHOW'}
+                        </button>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <Page />,
+            document.getElementById('root3')
         );
 
     </script>
