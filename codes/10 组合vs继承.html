@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        .father {
+            border: 1px solid darkgray;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div id="root2"></div>
+    <div id="root3"></div>
+    <div id="root4"></div>
+
+    <script type="text/babel">
+        //组件可以接受任意 props，包括基本数据类型，React 元素以及函数。在这节内容中，我们将把组件作为props来传递
+        //理解组件也可以作为props来传递是重要的
+
+        //占据一个预留位置的情况
+        function FancyBorder(props) {
+            return (
+                <div className={'FancyBorder-' + props.color}>
+                    {props.children}
+                </div>
+            );
+
+        }
+
+        function WelcomeDialog(props) {
+            return (
+                <FancyBorder color='blue' >
+                    <h1>hello world</h1>
+                    <h2>I am the son component</h2>
+                </FancyBorder>
+            );
+        }
+
+        ReactDOM.render(
+            <WelcomeDialog />,
+            document.getElementById('root')
+        );
+
+        //占据并预留多个位置的情况
+        //下面这个例子中发生了什么：
+        //1.组件Father为未知的子组件预留了两个位置；2.App组件将组件First和Second作为props传递给了Father组件；3.First组件和Second组件内容展示在Father组件相应的位置
+        function First(props) {
+            return <div>first</div>
+        }
+
+        function Second(props) {
+            return <div>second</div>
+        }
+
+        function Father(props) {
+            return (
+                <div className='father'>
+                    <div>{props.first}</div>
+                    <div>{props.second}</div>
+
+                </div>
+            );
+        }
+
+        function App(props) {
+            return (
+                <Father first={<First />} second={<Second />} />
+            );
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root2')
+        );
+
+        //之前的例子组件之间都是包含关系，以下是特例关系例子
+        //数据流向：WelcomeDialog > Dialog > FancyBorder
+        function Dialog(props) {
+            return (
+                <FancyBorder color='red'>
+                    <h1>{props.title}</h1>
+                    <p>{props.message}</p>
+                    {props.children}
+                </FancyBorder>
+            );
+        }
+
+        function WelcomeDialog(props) {
+            return (
+                <Dialog title='hello world' message='hello React' />
+            );
+        }
+
+        ReactDOM.render(
+            <WelcomeDialog />,
+            document.getElementById('root3')
+        );
+
+        //组合原则也适合class形式定义的组件
+        class SignUpDialog extends React.Component {
+            constructor(props) {
+                super(props);
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSignUp = this.handleSignUp.bind(this);
+                this.state = { login: '' }
+            }
+
+            handleChange(event) {
+                this.setState({ login: event.target.value });
+
+            }
+
+            handleSignUp() {
+                const msg = this.state.login;
+                alert(`hello! ${msg}`);
+
+            }
+
+            render() {
+                return (
+                    <Dialog title='Mars Exploration Program'
+                        message='How should we refer to you?'>
+                        <input value={this.state.login} onChange={this.handleChange} />
+                        <button onClick={this.handleSignUp}>Sign Me Up!</button>
+                    </Dialog>
+                );
+
+            }
+        }
+
+        ReactDOM.render(
+            <SignUpDialog />,
+            document.getElementById('root4')
+        );
+
+    </script>
+
+</body>
+
+</html>
