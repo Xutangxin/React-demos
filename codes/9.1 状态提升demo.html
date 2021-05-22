@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        .ipt {
+            width: 300px;
+            height: 20px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        //逻辑：子组件onChange > 调用父组件方法 > 父组件调用方法操作数据源state中的值，返回ui，同时将props传给子组件 > 子组件通过得到的props属性返回自身ui
+        class InputNumber extends React.Component {
+            constructor(props) {
+                super(props);
+                this.handleInput = this.handleInput.bind(this);
+            }
+
+            handleInput(e) {
+                this.props.handleInputVal(e.target.value);
+            }
+
+            render() {
+                const inputVal = this.props.inputVal;
+                return (
+                    <input className='ipt' value={inputVal} onChange={this.handleInput} />
+                );
+            }
+        }
+
+        class HandleInput extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    inputVal: ''
+                }
+                this.handleInputVal = this.handleInputVal.bind(this);
+            }
+
+            handleInputVal(val) {
+                this.setState({
+                    inputVal: val
+                });
+            }
+
+            render() {
+                return (
+                    <div>
+                        <InputNumber inputVal={this.state.inputVal} handleInputVal={this.handleInputVal} /><br />
+                        <InputNumber inputVal={this.state.inputVal} handleInputVal={this.handleInputVal} />
+
+                    </div>
+                );
+
+            }
+        }
+
+        ReactDOM.render(
+            <HandleInput />,
+            document.getElementById('root')
+        );
+
+    </script>
+
+</body>
+
+</html>
