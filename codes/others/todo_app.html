@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+    <style>
+        .todo-app {
+            width: 50%;
+            min-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            border: 2px solid lightgray;
+            border-radius: 10px;
+            padding-bottom: 20px;
+        }
+
+        #list {
+            text-align: left;
+        }
+
+        .todo-app #input {
+            display: inline-block;
+            margin: 0 5px 0 5px;
+            outline: pink;
+        }
+
+        #list-items {
+            padding-left: 22%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        class TodoApp extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    items: [],
+                    text: ''
+                }
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+
+            }
+
+            //表单输入数据时触发
+            handleChange(e) {
+                this.setState({
+                    text: e.target.value,
+                });
+
+            }
+
+            //提交表单时触发
+            handleSubmit(e) {
+
+                e.preventDefault();
+                if (this.state.text.trim().length === 0) return;
+                const newItem = {
+                    text: this.state.text,
+                    id: Date.now(),
+                }
+                //更新items内容，清空输入框内容
+                this.setState(state => ({
+                    items: state.items.concat(newItem),
+                    text: '',
+                }));
+
+            }
+
+            render() {
+                return (
+                    <div className='todo-app'>
+                        <h3>ToDo App</h3>
+                        <form onSubmit={this.handleSubmit}>
+                            <label htmlFor="new-todo"></label>
+                            What needs to be done?
+                            <input id='input' type="text" id='new-todo' onChange={this.handleChange} value={this.state.text} />
+                            <button onClick={this.handleSubmit}>add #{this.state.items.length + 1}</button>
+                        </form>
+
+                        <TodoList items={this.state.items} />
+
+                    </div>
+                );
+            }
+
+
+        }
+
+        function TodoList(props) {
+            return (
+                <div id='list-items'>
+                    <ul id='list'>
+                        {props.items.map(item => (
+                            <li key={item.id}>{item.text}</li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <TodoApp />,
+            document.getElementById('root')
+        );
+
+
+    </script>
+
+</body>
+
+</html>
