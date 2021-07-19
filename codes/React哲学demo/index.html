@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const productsList = [
+            { category: "Sporting Goods", price: "$49.99", stocked: true, name: "Football" },
+            { category: "Sporting Goods", price: "$9.99", stocked: true, name: "Baseball" },
+            { category: "Sporting Goods", price: "$29.99", stocked: false, name: "Basketball" },
+            { category: "Electronics", price: "$99.99", stocked: true, name: "iPod Touch" },
+            { category: "Electronics", price: "$399.99", stocked: false, name: "iPhone 5" },
+            { category: "Electronics", price: "$199.99", stocked: true, name: "Nexus 7" }
+        ];
+
+
+        class FilterableProductTable extends React.Component {//整体应用
+            constructor(props) {
+                super(props);
+                this.state = {
+                    list: productsList,
+                    isFilter: false,
+                    filterList: productsList.filter(val => val.stocked === true),
+                    keyWord: '',
+                }
+                this.handleFilter = this.handleFilter.bind(this);
+                this.handleTextInput = this.handleTextInput.bind(this);
+
+            }
+
+            handleFilter() {
+                this.setState({
+                    isFilter: !this.state.isFilter,
+                });
+            }
+
+            handleTextInput(e) {
+                this.setState({
+                    keyWord: e.target.value,
+                });
+            }
+
+            render() {
+                const list = this.state.list;
+                const filterList = list.filter(val => val.stocked === true);
+                let searchWord = this.state.keyWord;
+                let result = [];
+
+                if (this.state.isFilter) {
+                    result = filterList;
+                    searchMatches();
+                }
+                else {
+                    result = list;
+                    searchMatches();
+                }
+
+                searchMatches();
+
+                function searchMatches() {
+                    if (searchWord.trim().length) {
+                        for (let val of result) {
+                            if (val.name.toLowerCase() === searchWord.trim().toLowerCase()) {
+                                result = [val];
+                            }
+                        }
+                    }
+                }
+
+                return (
+                    <div className='table'>
+                        <SearchBar handleClick={this.handleFilter} handleInput={this.handleTextInput} />
+                        <ProductTable list={result} />
+                    </div>
+                );
+            }
+        }
+
+        class SearchBar extends React.Component {//头部，接受用户输入
+            constructor(props) {
+                super(props);
+            }
+
+            render() {
+                return (
+                    <div className='search-bar'>
+                        <input type="text" placeholder='Search...' onChange={this.props.handleInput} /><br />
+                        <input type="checkbox" onClick={this.props.handleClick} />Only show products in stock
+                    </div>
+                );
+            }
+
+        }
+
+        class ProductTable extends React.Component {//数据内容展示
+            constructor(props) {
+                super(props);
+            }
+
+            render() {
+                let list = this.props.list;
+                let sports = list.filter(val => val.category === 'Sporting Goods')
+                    .map(item => (<ProductRow key={item.price} productName={item.name} productPrice={item.price} />));
+
+                let electronics = list.filter(val => val.category === 'Electronics')
+                    .map(item => (<ProductRow key={item.price} productName={item.name} productPrice={item.price} />));
+
+                return (
+                    <div>
+                        <p className='title'>Name Price</p>
+                        <ProductCategoryRow title='Sporting Goods' />
+                        {sports}
+                        <ProductCategoryRow title='Electronics' />
+                        {electronics}
+                    </div>
+
+                );
+            }
+
+        }
+
+        class ProductCategoryRow extends React.Component {//产品标题
+            constructor(props) {
+                super(props);
+            }
+
+            render() {
+                return <p className='title'>{this.props.title}</p>
+            }
+        }
+
+        class ProductRow extends React.Component {//每行展示的产品
+            constructor(props) {
+                super(props);
+            }
+
+            render() {
+                return (
+                    <div className='item'>
+                        <span>{this.props.productName} {this.props.productPrice}</span>
+                    </div>
+                );
+
+            }
+        }
+
+
+
+        ReactDOM.render(<FilterableProductTable />, document.getElementById('root'));
+
+    </script>
+
+</body>
+
+</html>
