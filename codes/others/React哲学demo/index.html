@@ -56,6 +56,7 @@
                 const list = this.state.list;
                 const filterList = list.filter(val => val.stocked === true);
                 let searchWord = this.state.keyWord;
+                let isMatch = false;
                 let result = [];
 
                 if (this.state.isFilter) {
@@ -64,7 +65,7 @@
                 }
                 else {
                     result = list;
-                    searchMatches();
+                    // searchMatches();
                 }
 
                 searchMatches();
@@ -74,10 +75,14 @@
                         for (let val of result) {
                             if (val.name.toLowerCase() === searchWord.trim().toLowerCase()) {
                                 result = [val];
+                                isMatch = true;
                             }
                         }
+                        if (!isMatch) result = []
                     }
+
                 }
+
 
                 return (
                     <div className='table'>
