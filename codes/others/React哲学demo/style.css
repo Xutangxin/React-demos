@@ -25,3 +25,7 @@
 .search-bar {
     font-size: 14px;
 }
+
+.out-of-stock {
+    color: red;
+}

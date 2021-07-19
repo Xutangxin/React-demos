@@ -55,17 +55,15 @@
             render() {
                 const list = this.state.list;
                 const filterList = list.filter(val => val.stocked === true);
-                let searchWord = this.state.keyWord;
+                const searchWord = this.state.keyWord;
                 let isMatch = false;
-                let result = [];
+                let result;
 
                 if (this.state.isFilter) {
                     result = filterList;
-                    searchMatches();
                 }
                 else {
                     result = list;
-                    // searchMatches();
                 }
 
                 searchMatches();
@@ -93,72 +91,52 @@
             }
         }
 
-        class SearchBar extends React.Component {//头部，接受用户输入
-            constructor(props) {
-                super(props);
-            }
+        function SearchBar(props) {//头部，接受用户输入
 
-            render() {
-                return (
-                    <div className='search-bar'>
-                        <input type="text" placeholder='Search...' onChange={this.props.handleInput} /><br />
-                        <input type="checkbox" onClick={this.props.handleClick} />Only show products in stock
-                    </div>
-                );
-            }
+            return (
+                <div className='search-bar'>
+                    <input type="text" placeholder='Search...' onChange={props.handleInput} /><br />
+                    <input type="checkbox" onClick={props.handleClick} />Only show products in stock
+                </div>
+            );
 
         }
 
-        class ProductTable extends React.Component {//数据内容展示
-            constructor(props) {
-                super(props);
-            }
+        function ProductTable(props) {//数据内容展示
 
-            render() {
-                let list = this.props.list;
-                let sports = list.filter(val => val.category === 'Sporting Goods')
-                    .map(item => (<ProductRow key={item.price} productName={item.name} productPrice={item.price} />));
+            const list = props.list;
+            const sports = list.filter(val => val.category === 'Sporting Goods')
+                .map(item => (<ProductRow key={item.price} productName={item.name} productPrice={item.price} />));
 
-                let electronics = list.filter(val => val.category === 'Electronics')
-                    .map(item => (<ProductRow key={item.price} productName={item.name} productPrice={item.price} />));
+            const electronics = list.filter(val => val.category === 'Electronics')
+                .map(item => (<ProductRow key={item.price} productName={item.name} productPrice={item.price} />));
 
-                return (
-                    <div>
-                        <p className='title'>Name Price</p>
-                        <ProductCategoryRow title='Sporting Goods' />
-                        {sports}
-                        <ProductCategoryRow title='Electronics' />
-                        {electronics}
-                    </div>
+            return (
+                <div>
+                    <p className='title'>Name Price</p>
+                    <ProductCategoryRow title='Sporting Goods' />
+                    {sports}
+                    <ProductCategoryRow title='Electronics' />
+                    {electronics}
+                </div>
 
-                );
-            }
+            );
 
         }
 
-        class ProductCategoryRow extends React.Component {//产品标题
-            constructor(props) {
-                super(props);
-            }
+        function ProductCategoryRow(props) {//产品标题
 
-            render() {
-                return <p className='title'>{this.props.title}</p>
-            }
+            return <p className='title'>{props.title}</p>
         }
 
-        class ProductRow extends React.Component {//每行展示的产品
-            constructor(props) {
-                super(props);
-            }
+        function ProductRow(props) {//每行展示的产品
 
-            render() {
-                return (
-                    <div className='item'>
-                        <span>{this.props.productName} {this.props.productPrice}</span>
-                    </div>
-                );
+            return (
+                <div className='item'>
+                    <span>{props.productName} {props.productPrice}</span>
+                </div>
+            );
 
-            }
         }
 
 
